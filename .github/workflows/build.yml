@@ -34,7 +34,9 @@ jobs:
         
         - name: Compress to .zip
           run: |
-            zip -j main/torillic.zip "main/torillic/"
+            cd main/torillic
+            zip -r torillic.zip .
+            cd ../..
           
         - name: Commit build
           run: |
