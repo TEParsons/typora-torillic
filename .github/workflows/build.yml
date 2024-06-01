@@ -31,6 +31,10 @@ jobs:
         - name: Inject base Torillic
           run: |
             python base/utils/stub.py
+        
+        - name: Compress to .zip
+          run: |
+            zip -r torillic.zip main/torillic/
           
         - name: Commit build
           run: |
