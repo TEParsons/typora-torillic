@@ -75,6 +75,8 @@ jobs:
         - name: Release - Update binaries
           if: startsWith(github.ref, 'refs/tags/')
           uses: actions/upload-release-asset@main
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             upload_url: ${{ steps.release.outputs.upload_url }}
             asset_path: main/torillic/torillic.zip
