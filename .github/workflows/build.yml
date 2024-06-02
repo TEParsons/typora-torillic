@@ -62,6 +62,30 @@ jobs:
             branch: last-release
             force: true
             directory: ./main
+      
+        - name: Release - Get info
+          if: startsWith(github.ref, 'refs/tags/')
+          id: release
+          uses: cardinalby/git-get-release-action@1.2.4
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            tag: ${{ github.ref_name }}            
+          
+        - name: Release - Format release
+          if: startsWith(github.ref, 'refs/tags/')
+          uses: softprops/action-gh-release@v2
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            body: |
+              > Torillic: A theme which styles your notes to look like the official Dungeons & Dragons 5e content books.
+
+              ${{ steps.release.outputs.body }}
+
+              # To install
+              Download and extract typora.zip, then copy the extracted files to your Typora theme directory.
+            files: |
+              main/torillic/torillic.zip
         
         - name: Release - Upload binaries
           if: startsWith(github.ref, 'refs/tags/')
