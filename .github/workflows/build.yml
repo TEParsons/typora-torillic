@@ -20,7 +20,7 @@ jobs:
           uses: actions/checkout@v3
           with:
             repository: TEParsons/torillic
-            ref: split
+            ref: main
             path: base
         
         - name: Setup Python
@@ -70,7 +70,14 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            tag: ${{ github.ref_name }}            
+            tag: ${{ github.ref_name }}
+        
+        - name: Release - Build changelog
+          if: startsWith(github.ref, 'refs/tags/')
+          id: changelog
+          run: |
+            pip install GitPython
+            python base/utils/changes.py "./main" ${{ github.ref_name }}
           
         - name: Release - Format release
           if: startsWith(github.ref, 'refs/tags/')
@@ -81,6 +88,8 @@ jobs:
               > Torillic: A theme which styles your notes to look like the official Dungeons & Dragons 5e content books.
 
               ${{ steps.release.outputs.body }}
+
+              ${{ steps.changelog.outputs.changelog }}
 
               # To install
               Download and extract typora.zip, then copy the extracted files to your Typora theme directory.
